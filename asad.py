@@ -53,13 +53,13 @@ class particle:
             self.velocity[i]=intertia_coefficient * self.velocity[i] + cognitive_component + social_component
             
     # update particle position
-    def position_update(self,lowerBound, higherBound):
+    def position_update(self,ll, higherBound):
        for i in range(0,self.dimensions):
            self.current_position[i]=self.current_position[i] + self.velocity[i]
 
            # checking lower bound
-           if self.current_position[i] < lowerBound:
-               self.current_position[i]=lowerBound
+           if self.current_position[i] < ll:
+               self.current_position[i]=ll
 
            # checking upper bound
            if self.current_position[i] > higherBound:
@@ -75,12 +75,12 @@ class particle:
            self.best_cost = self.cost
            
 # positions given by user in ',' separated form
-# lowerBound given by user default -10
-# upperBound given by user default 10
-# maximum iteration given by user default 20
+# ll given by user default -10
+# ul given by user default 10
+# total iteration given by user default 20
 # population_size given by user default 10
 class PSO():
-    def __init__(self, costfunc, positions, lowerBound, upperBound, population_size, maximum_iteration):
+    def __init__(self, costfunc, positions, ll, ul, population_size, total_iteration):
     
         dimensions = len(positions)
         global_best_cost = -1
@@ -91,7 +91,7 @@ class PSO():
             house_of_particle.append(particle(positions))
 
         i = 0
-        while i < maximum_iteration:
+        while i < total_iteration:
             for j in range (0, population_size):
                 house_of_particle[j].run_cost_function(costfunc)
                 if (house_of_particle[j].cost) < global_best_cost or global_best_cost == -1:
@@ -100,7 +100,7 @@ class PSO():
                     
             for k in range (0, population_size):
                 house_of_particle[k].velocity_update(global_best_position)
-                house_of_particle[k].position_update(lowerBound, upperBound)
+                house_of_particle[k].position_update(ll, ul)
             print ("iteration i = " , i , "   " , global_best_position)
             print ("iteration i = " , i , "   " , global_best_cost)
             i+=1
@@ -113,26 +113,26 @@ class PSO():
 print (sys.argv)
 
 positions = list(map(int, sys.argv[1].split(',')))
-lowerBound = int(sys.argv[2])
-upperBound = int(sys.argv[3])
-no_of_positions = int(sys.argv[4])
-maximum_iterations = int(sys.argv[5])
+ll = int(sys.argv[2])
+ul = int(sys.argv[3])
+birds = int(sys.argv[4])
+total_iterations = int(sys.argv[5])
 choose_function = int(sys.argv[6])
 print choose_function
 if choose_function == 1:
-    print "Sphere function", positions, lowerBound, higherBound, no_of_positions, maximum_iterations
-    PSO(sphereFunction, positions, lowerBound, higherBound, no_of_positions, maximum_iterations)
+    print "Sphere function", positions, ll, ul, birds, total_iterations
+    PSO(sphereFunction, positions, ll, ul, birds, total_iterations)
 if choose_function == 2:
-    print "Ackley function", positions, lowerBound, higherBound, no_of_positions, maximum_iterations
-    PSO(ackleyFunction, positions, lowerBound, higherBound, no_of_positions, maximum_iterations)
+    print "Ackley function", positions, ll, ul, birds, total_iterations
+    PSO(ackleyFunction, positions, ll, ul, birds, total_iterations)
 if choose_function == 3:
-    print "Squares Function", positions, lowerBound, higherBound, no_of_positions, maximum_iterations
-    PSO(squaresFunction, positions, lowerBound, higherBound, no_of_positions, maximum_iterations)
+    print "Squares Function", positions, ll, ul, birds, total_iterations
+    PSO(squaresFunction, positions, ll, ul, birds, total_iterations)
 #positions=[10, 12]
-#lowerBound = -10
-#upperBound = 10
-#no_of_positions = 30
-#maximum_iterations = 15
-#PSO(sphereFunction, positions, lowerBound, upperBound, no_of_positions, maximum_iterations)
-#PSO(ackleyFunction, positions, lowerBound, upperBound, no_of_positions, maximum_iterations)
-#PSO(squaresFunction, positions, lowerBound, upperBound, no_of_positions, maximum_iterations)
+#ll = -10
+#ul = 10
+#birds = 30
+#total_iterations = 15
+#PSO(sphereFunction, positions, ll, ul, birds, total_iterations)
+#PSO(ackleyFunction, positions, ll, ul, birds, total_iterations)
+#PSO(squaresFunction, positions, ll, ul, birds, total_iterations)
